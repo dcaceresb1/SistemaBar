@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nuevo producto | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Nuevo producto</h2>
+        <p>Registra un nuevo producto en el sistema</p>
+    </div>
+</div>
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Guardar producto
+            </button>
+
+            <a href="{% url 'lista_productos' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

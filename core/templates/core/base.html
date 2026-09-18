@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}MIXOLOGO{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="logo">
+            <h2>SISTEMA MIXOLOGO</h2>
+        </div>
+
+        <nav>
+           <ul>
+    <li>
+        <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+    </li>
+
+    <li>🛒 Ventas</li>
+
+    <li>
+        <a href="{% url 'lista_productos' %}">🍺 Productos</a>
+    </li>
+
+    <li>📦 Inventario</li>
+    <li>🚚 Compras</li>
+    <li>💵 Caja</li>
+    <li>📈 Reportes</li>
+</ul>
+        </nav>
+
+    </div>
+
+    <div class="main-container">
+
+        <header class="topbar">
+            <div>
+                <h3>Administración</h3>
+            </div>
+
+            <div class="usuario">
+                Administrador
+            </div>
+        </header>
+
+        <main class="contenido">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

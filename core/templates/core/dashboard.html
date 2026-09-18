@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Dashboard | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Dashboard</h2>
+        <p>Resumen general del negocio</p>
+    </div>
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <div class="card-icon">💰</div>
+        <div>
+            <p>Ventas de hoy</p>
+            <h2>$0.00</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">🍺</div>
+        <div>
+            <p>Productos</p>
+            <h2>{{ total_productos }}</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">⚠️</div>
+        <div>
+            <p>Stock bajo</p>
+            <h2>{{ productos_stock_bajo }}</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">📦</div>
+        <div>
+            <p>Inventario</p>
+            <h2>${{ valor_inventario|floatformat:2 }}</h2>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
