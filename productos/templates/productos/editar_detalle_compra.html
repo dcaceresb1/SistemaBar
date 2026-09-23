@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Editar producto | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>✏️ Editar producto de la compra</h2>
+
+    <p>
+        Compra #{{ compra.id }}
+        —
+        {{ compra.proveedor.nombre }}
+    </p>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit"
+                    class="btn-guardar">
+                Guardar cambios
+            </button>
+
+            <a href="{% url 'detalle_compra' compra.id %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

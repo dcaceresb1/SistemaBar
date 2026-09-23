@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nueva venta | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>🛒 Nueva venta</h2>
+    <p>Registrar una nueva venta</p>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit"
+                    class="btn-guardar">
+                Continuar
+            </button>
+
+            <a href="{% url 'lista_ventas' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Compra #{{ compra.id }} | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>🧾 Compra #{{ compra.id }}</h2>
+
+        <p>
+            Proveedor:
+            <strong>{{ compra.proveedor.nombre }}</strong>
+        </p>
+    </div>
+
+    <a href="{% url 'lista_compras' %}"
+       class="btn-cancelar">
+        ← Volver
+    </a>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <p>
+        <strong>Documento:</strong>
+        {{ compra.numero_documento|default:"-" }}
+    </p>
+
+    <p>
+        <strong>Fecha:</strong>
+        {{ compra.fecha|date:"d/m/Y H:i" }}
+    </p>
+
+    <p>
+        <strong>Estado:</strong>
+        {{ compra.get_estado_display }}
+    </p>
+
+    <p>
+        <strong>Observación:</strong>
+        {{ compra.observacion|default:"-" }}
+    </p>
+
+</div>
+
+
+<div class="encabezado-acciones">
+
+    <h3>Productos de la compra</h3>
+
+    {% if compra.estado == "BORRADOR" %}
+
+        <a href="{% url 'agregar_producto_compra' compra.id %}"
+           class="btn-nuevo">
+            + Agregar producto
+        </a>
+
+    {% endif %}
+
+</div>
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Costo unitario</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for detalle in detalles %}
+
+            <tr>
+                <td>{{ detalle.producto.nombre }}</td>
+                <td>{{ detalle.cantidad }}</td>
+                <td>$ {{ detalle.costo_unitario }}</td>
+                <td>$ {{ detalle.subtotal }}</td>
+                <td class="acciones">
+
+    {% if compra.estado == "BORRADOR" %}
+
+        <a href="{% url 'editar_detalle_compra' detalle.id %}"
+           class="btn-editar">
+            ✏️ Editar
+        </a>
+
+        <a href="{% url 'eliminar_detalle_compra' detalle.id %}"
+           class="btn-desactivar-tabla">
+            🗑 Eliminar
+        </a>
+
+    {% else %}
+
+        -
+
+    {% endif %}
+
+</td>
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="5">
+                    Todavía no se han agregado productos.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div class="formulario-contenedor">
+
+    <h3>
+        Total de la compra:
+        $ {{ total|floatformat:2 }}
+    </h3>
+
+</div>
+
+{% if compra.estado == "BORRADOR" and detalles %}
+
+<div class="formulario-acciones">
+
+    <a href="{% url 'confirmar_compra' compra.id %}"
+       class="btn-guardar">
+        ✅ Confirmar compra
+    </a>
+
+</div>
+
+{% endif %}
+
+{% if compra.estado == "CONFIRMADA" %}
+
+<div class="formulario-acciones">
+
+    <a href="{% url 'anular_compra' compra.id %}"
+       class="btn-desactivar-tabla">
+        ⚠️ Anular compra
+    </a>
+
+</div>
+
+{% endif %}
+        
+{% endblock %}
+

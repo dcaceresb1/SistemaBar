@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nueva categoría | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>Nueva categoría</h2>
+        <p>Registra una nueva categoría de productos</p>
+    </div>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Guardar categoría
+            </button>
+
+            <a href="{% url 'lista_categorias' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

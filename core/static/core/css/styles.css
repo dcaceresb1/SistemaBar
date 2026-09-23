@@ -294,3 +294,327 @@ body {
 .formulario-acciones {
     margin-top: 25px;
 }
+/* Botón editar */
+
+.btn-editar {
+    display: inline-block;
+    background-color: #f59e0b;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.btn-editar:hover {
+    background-color: #d97706;
+}
+
+/* =========================
+   DESACTIVAR PRODUCTO
+========================= */
+
+.acciones {
+    white-space: nowrap;
+}
+
+.btn-desactivar-tabla {
+    display: inline-block;
+    background-color: #dc2626;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.btn-desactivar-tabla:hover {
+    background-color: #b91c1c;
+}
+
+.confirmacion-contenedor {
+    background-color: white;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+.confirmacion-contenedor h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.confirmacion-contenedor p {
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+.btn-desactivar {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-desactivar:hover {
+    background-color: #b91c1c;
+}
+
+/* =========================
+   PRODUCTOS INACTIVOS
+========================= */
+
+.tabla-productos tbody tr.producto-inactivo {
+    background-color: #f3f4f6;
+}
+
+.tabla-productos tbody tr.producto-inactivo td {
+    color: #9ca3af;
+}
+
+.tabla-productos tbody tr.producto-inactivo strong {
+    color: #6b7280;
+}
+
+.tabla-productos tbody tr.producto-inactivo:hover {
+    background-color: #e5e7eb;
+}
+
+/* Estados */
+
+.estado {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.estado-activo {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.estado-inactivo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-reactivar-tabla,
+.btn-reactivar {
+    display: inline-block;
+    background-color: #16a34a;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-reactivar-tabla {
+    margin-left: 5px;
+}
+
+.btn-reactivar-tabla:hover,
+.btn-reactivar:hover {
+    background-color: #15803d;
+}
+
+/* =========================
+   BUSCADOR DE PRODUCTOS
+========================= */
+
+.filtros-productos {
+    background-color: white;
+    padding: 18px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.form-busqueda {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-busqueda input {
+    width: 350px;
+    max-width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-busqueda select {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    min-width: 180px;
+    cursor: pointer;
+}
+
+.form-busqueda {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-buscar {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-buscar:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-limpiar {
+    color: #374151;
+    text-decoration: none;
+    padding: 10px;
+}
+
+/* ==============================
+   PUNTO DE VENTA
+   ============================== */
+
+.pos-container {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.pos-productos,
+.pos-cuenta {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+.pos-productos h3,
+.pos-cuenta h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.pos-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(150px, 1fr)
+    );
+    gap: 12px;
+}
+
+.pos-producto {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding: 15px;
+
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    text-decoration: none;
+    color: #111827;
+
+    transition: 0.2s;
+}
+
+.pos-producto:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+.pos-producto span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.pos-producto small {
+    color: #6b7280;
+}
+
+.pos-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 20px;
+    padding: 20px;
+
+    background: #111827;
+    color: white;
+
+    border-radius: 8px;
+}
+
+.pos-total span {
+    font-size: 18px;
+}
+
+.pos-total strong {
+    font-size: 28px;
+}
+
+@media (max-width: 900px) {
+
+    .pos-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.cantidad-pos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cantidad-btn {
+    width: 30px;
+    height: 30px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    background: #e5e7eb;
+    color: #111827;
+
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.cantidad-btn:hover {
+    background: #d1d5db;
+}
+
+.cantidad-pos strong {
+    min-width: 25px;
+    text-align: center;
+}

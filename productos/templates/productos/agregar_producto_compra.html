@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Agregar producto | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>➕ Agregar producto</h2>
+
+    <p>
+        Compra #{{ compra.id }}
+        —
+        {{ compra.proveedor.nombre }}
+    </p>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit"
+                    class="btn-guardar">
+                Agregar producto
+            </button>
+
+            <a href="{% url 'detalle_compra' compra.id %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

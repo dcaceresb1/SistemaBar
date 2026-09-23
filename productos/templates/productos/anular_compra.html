@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Anular compra | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="confirmacion-contenedor">
+
+    <h2>⚠️ Anular compra #{{ compra.id }}</h2>
+
+    <p>
+        Proveedor:
+        <strong>{{ compra.proveedor.nombre }}</strong>
+    </p>
+
+    <p>
+        Esta operación retirará del inventario
+        las cantidades ingresadas por esta compra.
+    </p>
+
+    {% if error %}
+
+        <div class="mensaje-error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+    <br>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-productos">
+
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad a retirar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for detalle in detalles %}
+
+                <tr>
+                    <td>{{ detalle.producto.nombre }}</td>
+                    <td>{{ detalle.cantidad }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            {% if not error %}
+
+                <button type="submit"
+                        class="btn-desactivar">
+                    Anular compra
+                </button>
+
+            {% endif %}
+
+            <a href="{% url 'detalle_compra' compra.id %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

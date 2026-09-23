@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Desactivar proveedor | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="confirmacion-contenedor">
+
+    <h2>Desactivar proveedor</h2>
+
+    <p>
+        ¿Estás seguro de que deseas desactivar a
+        <strong>{{ proveedor.nombre }}</strong>?
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-desactivar">
+                Sí, desactivar
+            </button>
+
+            <a href="{% url 'lista_proveedores' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

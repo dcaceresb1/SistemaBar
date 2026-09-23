@@ -19,6 +19,78 @@ Productos | SistemaBar
 
 </div>
 
+<div class="filtros-productos">
+
+    <form method="GET" class="form-busqueda">
+
+        <input
+            type="text"
+            name="buscar"
+            value="{{ busqueda }}"
+            placeholder="Buscar por nombre o código..."
+        >
+
+        <select name="categoria">
+
+            <option value="">
+                Todas las categorías
+            </option>
+
+            {% for categoria in categorias %}
+
+                <option
+                    value="{{ categoria.id }}"
+                    {% if categoria_seleccionada == categoria.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+                    {{ categoria.nombre }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <select name="estado">
+
+            <option value="">
+                Todos los estados
+            </option>
+
+            <option
+                value="activo"
+                {% if estado_seleccionado == "activo" %}selected{% endif %}
+            >
+                Activos
+            </option>
+
+            <option
+                value="inactivo"
+                {% if estado_seleccionado == "inactivo" %}selected{% endif %}
+            >
+                Inactivos
+            </option>
+
+        </select>
+
+        <button type="submit" class="btn-buscar">
+            🔍 Buscar
+        </button>
+
+        {% if busqueda or categoria_seleccionada or estado_seleccionado %}
+
+            <a href="{% url 'lista_productos' %}" class="btn-limpiar">
+                Limpiar
+            </a>
+
+        {% endif %}
+
+    </form>
+
+</div>
+
+<div class="tabla-contenedor">
+
     <table class="tabla-productos">
 
         <thead>
@@ -32,6 +104,7 @@ Productos | SistemaBar
                 <th>Stock</th>
                 <th>Stock mínimo</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
@@ -39,7 +112,8 @@ Productos | SistemaBar
 
             {% for producto in productos %}
 
-            <tr>
+            <tr {% if not producto.activo %}class="producto-inactivo"{% endif %}>
+
                 <td>{{ producto.codigo|default:"-" }}</td>
 
                 <td>
@@ -58,19 +132,49 @@ Productos | SistemaBar
 
                 <td>{{ producto.stock_minimo }}</td>
 
-                <td>
-                    {% if producto.activo %}
-                        Activo
-                    {% else %}
-                        Inactivo
-                    {% endif %}
+               <td>
+                  {% if producto.activo %}
+
+                 <span class="estado estado-activo">
+                     ACTIVO
+                 </span>
+
+                {% else %}
+
+              <span class="estado estado-inactivo">
+                  INACTIVO
+                 </span>
+
+                 {% endif %}
                 </td>
-            </tr>
+
+              <td class="acciones">
+
+    <a href="{% url 'editar_producto' producto.id %}" class="btn-editar">
+        ✏️ Editar
+    </a>
+
+    {% if producto.activo %}
+
+        <a href="{% url 'desactivar_producto' producto.id %}" class="btn-desactivar-tabla">
+            ⛔ Desactivar
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'reactivar_producto' producto.id %}" class="btn-reactivar-tabla">
+            ♻️ Reactivar
+        </a>
+
+    {% endif %}
+
+</td>
+                 </tr>
 
             {% empty %}
 
             <tr>
-                <td colspan="9">
+                <td colspan="10">
                     No existen productos registrados.
                 </td>
             </tr>

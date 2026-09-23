@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Desactivar categoría | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Desactivar categoría</h2>
+        <p>Confirma la desactivación de la categoría</p>
+    </div>
+</div>
+
+<div class="confirmacion-contenedor">
+
+    <h3>¿Deseas desactivar "{{ categoria.nombre }}"?</h3>
+
+    <p>
+        La categoría permanecerá registrada en el sistema.
+        Los productos existentes no serán eliminados.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-desactivar">
+                ⛔ Desactivar
+            </button>
+
+            <a href="{% url 'lista_categorias' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

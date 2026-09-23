@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Reactivar producto | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Reactivar producto</h2>
+        <p>Confirma la reactivación del producto</p>
+    </div>
+</div>
+
+<div class="confirmacion-contenedor">
+
+    <h3>¿Deseas reactivar "{{ producto.nombre }}"?</h3>
+
+    <p>
+        El producto volverá a estar activo y disponible
+        para las operaciones del sistema.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-reactivar">
+                ♻️ Reactivar
+            </button>
+
+            <a href="{% url 'lista_productos' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

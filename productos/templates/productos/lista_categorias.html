@@ -1,0 +1,117 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Categorías | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>Categorías</h2>
+        <p>Administración de categorías de productos</p>
+    </div>
+
+    <a href="{% url 'crear_categoria' %}" class="btn-nuevo">
+        + Nueva categoría
+    </a>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for categoria in categorias %}
+
+            <tr {% if not categoria.activo %}class="producto-inactivo"{% endif %}>
+
+                <td>
+                    {{ categoria.id }}
+                </td>
+
+                <td>
+                    <strong>{{ categoria.nombre }}</strong>
+                </td>
+
+                <td>
+                    {{ categoria.descripcion|default:"-" }}
+                </td>
+
+                <td>
+
+                    {% if categoria.activo %}
+
+                        <span class="estado estado-activo">
+                            ACTIVA
+                        </span>
+
+                    {% else %}
+
+                        <span class="estado estado-inactivo">
+                            INACTIVA
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+               <td class="acciones">
+
+    <a href="{% url 'editar_categoria' categoria.id %}" class="btn-editar">
+        ✏️ Editar
+    </a>
+
+    {% if categoria.activo %}
+
+        <a href="{% url 'desactivar_categoria' categoria.id %}"
+           class="btn-desactivar-tabla">
+            ⛔ Desactivar
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'reactivar_categoria' categoria.id %}"
+           class="btn-reactivar-tabla">
+            ♻️ Reactivar
+        </a>
+
+    {% endif %}
+
+</td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="5">
+                    No existen categorías registradas.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

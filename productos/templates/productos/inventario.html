@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Inventario | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>📦 Inventario</h2>
+        <p>Control de existencias de productos</p>
+    </div>
+
+    <a href="{% url 'historial_inventario' %}" class="btn-nuevo">
+        📋 Historial de movimientos
+    </a>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Stock actual</th>
+                <th>Stock mínimo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for producto in productos %}
+
+            <tr>
+
+                <td>
+                    {{ producto.codigo|default:"-" }}
+                </td>
+
+                <td>
+                    <strong>{{ producto.nombre }}</strong>
+                </td>
+
+                <td>
+                    {{ producto.categoria.nombre }}
+                </td>
+
+                <td>
+                    {{ producto.stock }}
+                </td>
+
+                <td>
+                    {{ producto.stock_minimo }}
+                </td>
+
+                <td>
+
+                    {% if producto.stock <= producto.stock_minimo %}
+
+                        <span class="estado estado-inactivo">
+                            STOCK BAJO
+                        </span>
+
+                    {% else %}
+
+                        <span class="estado estado-activo">
+                            NORMAL
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+               <td>
+
+    <a href="{% url 'registrar_movimiento' producto.id %}"
+       class="btn-editar">
+        ↕ Movimiento
+    </a>
+
+</td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="7">
+                    No existen productos activos.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

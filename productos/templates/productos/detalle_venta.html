@@ -1,0 +1,162 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Venta #{{ venta.id }} | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>🛒 Venta #{{ venta.id }}</h2>
+
+        <p>
+            Estado:
+            <strong>{{ venta.get_estado_display }}</strong>
+        </p>
+    </div>
+
+    <a href="{% url 'lista_ventas' %}"
+       class="btn-cancelar">
+        ← Volver
+    </a>
+
+</div>
+
+
+{% if venta.estado == "BORRADOR" %}
+
+<div class="pos-container">
+
+    <!-- CATÁLOGO -->
+
+    <div class="pos-productos">
+
+        <h3>Productos</h3>
+
+        <div class="pos-grid">
+
+            {% for producto in productos %}
+
+                <a href="{% url 'agregar_producto_pos' venta.id producto.id %}"
+                   class="pos-producto">
+
+                    <strong>
+                        {{ producto.nombre }}
+                    </strong>
+
+                    {% if producto.presentacion %}
+                        <small>
+                            {{ producto.presentacion }}
+                        </small>
+                    {% endif %}
+
+                    <span>
+                        $ {{ producto.precio }}
+                    </span>
+
+                    <small>
+                        Stock: {{ producto.stock }}
+                    </small>
+
+                </a>
+
+            {% empty %}
+
+                <p>
+                    No existen productos disponibles.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- CUENTA -->
+
+    <div class="pos-cuenta">
+
+        <h3>Cuenta actual</h3>
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for detalle in detalles %}
+
+            <tr>
+
+                <td>
+                    {{ detalle.producto.nombre }}
+                </td>
+
+                <td>
+
+                    <div class="cantidad-pos">
+
+                        <a href="{% url 'disminuir_producto_venta' detalle.id %}"
+                           class="cantidad-btn">
+                            −
+                        </a>
+
+                        <strong>
+                            {{ detalle.cantidad }}
+                        </strong>
+
+                        <a href="{% url 'aumentar_producto_venta' detalle.id %}"
+                           class="cantidad-btn">
+                            +
+                        </a>
+
+                    </div>
+
+                </td>
+
+                <td>
+                    $ {{ detalle.subtotal }}
+                </td>
+
+                <td>
+
+                    <a href="{% url 'eliminar_producto_venta' detalle.id %}"
+                       class="btn-desactivar-tabla">
+                        🗑
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="4">
+                    Agrega productos a la venta.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

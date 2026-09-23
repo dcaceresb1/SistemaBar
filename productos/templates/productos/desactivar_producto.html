@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Desactivar producto | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Desactivar producto</h2>
+        <p>Confirma la desactivación del producto</p>
+    </div>
+</div>
+
+<div class="confirmacion-contenedor">
+
+    <h3>¿Deseas desactivar "{{ producto.nombre }}"?</h3>
+
+    <p>
+        El producto permanecerá registrado en el sistema,
+        pero dejará de estar activo.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-desactivar">
+                Desactivar
+            </button>
+
+            <a href="{% url 'lista_productos' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

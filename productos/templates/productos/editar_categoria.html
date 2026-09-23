@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Editar categoría | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>Editar categoría</h2>
+        <p>Modifica la información de {{ categoria.nombre }}</p>
+    </div>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Guardar cambios
+            </button>
+
+            <a href="{% url 'lista_categorias' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

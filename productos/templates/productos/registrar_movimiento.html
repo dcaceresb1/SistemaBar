@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Movimiento de inventario | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>Movimiento de inventario</h2>
+        <p>{{ producto.nombre }}</p>
+    </div>
+
+</div>
+
+
+<div class="confirmacion-contenedor">
+
+    <h3>Stock actual: {{ producto.stock }}</h3>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Guardar movimiento
+            </button>
+
+            <a href="{% url 'inventario' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

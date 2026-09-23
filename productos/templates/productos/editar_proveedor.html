@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Editar proveedor | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>Editar proveedor</h2>
+    <p>{{ proveedor.nombre }}</p>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Guardar cambios
+            </button>
+
+            <a href="{% url 'lista_proveedores' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

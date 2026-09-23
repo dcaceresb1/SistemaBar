@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Confirmar compra | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="confirmacion-contenedor">
+
+    <h2>✅ Confirmar compra #{{ compra.id }}</h2>
+
+    <p>
+        Proveedor:
+        <strong>{{ compra.proveedor.nombre }}</strong>
+    </p>
+
+    <p>
+        Al confirmar esta compra, las cantidades serán
+        ingresadas automáticamente al inventario.
+    </p>
+
+    <br>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-productos">
+
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Costo</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for detalle in detalles %}
+
+                <tr>
+                    <td>{{ detalle.producto.nombre }}</td>
+                    <td>{{ detalle.cantidad }}</td>
+                    <td>$ {{ detalle.costo_unitario }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit"
+                    class="btn-guardar">
+                ✅ Confirmar compra
+            </button>
+
+            <a href="{% url 'detalle_compra' compra.id %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

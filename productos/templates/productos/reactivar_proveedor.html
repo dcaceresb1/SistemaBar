@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Reactivar proveedor | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="confirmacion-contenedor">
+
+    <h2>Reactivar proveedor</h2>
+
+    <p>
+        ¿Deseas reactivar al proveedor
+        <strong>{{ proveedor.nombre }}</strong>?
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-reactivar">
+                Sí, reactivar
+            </button>
+
+            <a href="{% url 'lista_proveedores' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

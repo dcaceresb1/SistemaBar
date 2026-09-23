@@ -1,0 +1,192 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Historial de inventario | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>📋 Historial de inventario</h2>
+        <p>Movimientos registrados en el inventario</p>
+    </div>
+
+    <a href="{% url 'inventario' %}" class="btn-nuevo">
+        ← Volver al inventario
+    </a>
+
+</div>
+
+<div class="filtros-productos">
+
+    <form method="GET" class="form-busqueda">
+
+        <select name="producto">
+
+            <option value="">
+                Todos los productos
+            </option>
+
+            {% for producto in productos %}
+
+                <option
+                    value="{{ producto.id }}"
+                    {% if producto_seleccionado == producto.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+                    {{ producto.nombre }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <select name="tipo">
+
+            <option value="">
+                Todos los movimientos
+            </option>
+
+            {% for valor, nombre in tipos_movimiento %}
+
+                <option
+                    value="{{ valor }}"
+                    {% if tipo_seleccionado == valor %}selected{% endif %}
+                >
+                    {{ nombre }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <select name="motivo">
+
+            <option value="">
+                Todos los motivos
+            </option>
+
+            {% for valor, nombre in motivos %}
+
+                <option
+                    value="{{ valor }}"
+                    {% if motivo_seleccionado == valor %}selected{% endif %}
+                >
+                    {{ nombre }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <button type="submit" class="btn-buscar">
+            🔍 Filtrar
+        </button>
+
+
+        {% if producto_seleccionado or tipo_seleccionado or motivo_seleccionado %}
+
+            <a href="{% url 'historial_inventario' %}" class="btn-limpiar">
+                Limpiar
+            </a>
+
+        {% endif %}
+
+    </form>
+
+</div>
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Motivo</th>
+                <th>Cantidad</th>
+                <th>Stock anterior</th>
+                <th>Stock nuevo</th>
+                <th>Observación</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for movimiento in movimientos %}
+
+            <tr>
+
+                <td>
+                    {{ movimiento.fecha|date:"d/m/Y H:i" }}
+                </td>
+
+                <td>
+                    <strong>{{ movimiento.producto.nombre }}</strong>
+                </td>
+
+                <td>
+
+                    {% if movimiento.tipo == "ENTRADA" %}
+
+                        <span class="estado estado-activo">
+                            ↑ ENTRADA
+                        </span>
+
+                    {% else %}
+
+                        <span class="estado estado-inactivo">
+                            ↓ SALIDA
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+                    {{ movimiento.get_motivo_display }}
+                </td>
+
+                <td>
+                    {{ movimiento.cantidad }}
+                </td>
+
+                <td>
+                    {{ movimiento.stock_anterior }}
+                </td>
+
+                <td>
+                    {{ movimiento.stock_nuevo }}
+                </td>
+
+                <td>
+                    {{ movimiento.observacion|default:"-" }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="8">
+                    No existen movimientos registrados.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Reactivar categoría | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>Reactivar categoría</h2>
+        <p>Confirma la reactivación de la categoría</p>
+    </div>
+</div>
+
+<div class="confirmacion-contenedor">
+
+    <h3>¿Deseas reactivar "{{ categoria.nombre }}"?</h3>
+
+    <p>
+        La categoría volverá a estar disponible para su uso.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-reactivar">
+                ♻️ Reactivar
+            </button>
+
+            <a href="{% url 'lista_categorias' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

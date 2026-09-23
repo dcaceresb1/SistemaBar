@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nueva compra | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>🧾 Nueva compra</h2>
+    <p>Información general de la compra</p>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button type="submit" class="btn-guardar">
+                Continuar
+            </button>
+
+            <a href="{% url 'lista_compras' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

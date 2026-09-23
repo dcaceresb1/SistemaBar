@@ -1,0 +1,111 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Compras | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>🧾 Compras</h2>
+        <p>Registro y administración de compras</p>
+    </div>
+
+    <a href="{% url 'crear_compra' %}" class="btn-nuevo">
+        + Nueva compra
+    </a>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>N.º</th>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Documento</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for compra in compras %}
+
+            <tr>
+
+                <td>
+                    #{{ compra.id }}
+                </td>
+
+                <td>
+                    {{ compra.fecha|date:"d/m/Y H:i" }}
+                </td>
+
+                <td>
+                    {{ compra.proveedor.nombre }}
+                </td>
+
+                <td>
+                    {{ compra.numero_documento|default:"-" }}
+                </td>
+
+                <td>
+
+                    {% if compra.estado == "BORRADOR" %}
+
+                        <span class="estado">
+                            BORRADOR
+                        </span>
+
+                    {% elif compra.estado == "CONFIRMADA" %}
+
+                        <span class="estado estado-activo">
+                            CONFIRMADA
+                        </span>
+
+                    {% else %}
+
+                        <span class="estado estado-inactivo">
+                            ANULADA
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a href="{% url 'detalle_compra' compra.id %}"
+                       class="btn-editar">
+                        👁 Ver
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="6">
+                    No existen compras registradas.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
