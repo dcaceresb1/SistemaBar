@@ -1,4 +1,5 @@
 {% load static %}
+{% load permisos %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -26,12 +27,23 @@
         <a href="{% url 'dashboard' %}">📊 Dashboard</a>
     </li>
 
+    <li> 
+        {% if request.user|tiene_rol:"Administrador" or request.user|tiene_rol:"Cajero" %}
+
+            <a href="{% url 'lista_clientes' %}">
+            👥 Clientes
+             </a>
+
+{% endif %}
+    </li>
+    
     <li>
     <a href="{% url 'lista_ventas' %}">
         🛒 Ventas
     </a>
     </li>
 
+{% if request.user|tiene_rol:"Administrador" or request.user|tiene_rol:"Inventario" %}
     <li>
         <a href="{% url 'lista_productos' %}">🍺 Productos</a>
     </li>
@@ -43,6 +55,10 @@
     <li>
     <a href="{% url 'inventario' %}">📦 Inventario</a>
     </li>   
+
+{% endif %}
+
+{% if request.user|tiene_rol:"Administrador" or request.user|tiene_rol:"Inventario" %}
 
     <li>
     <a href="{% url 'lista_proveedores' %}">
@@ -56,10 +72,59 @@
     </a>
     </li>
 
-    <li>💵 Caja</li>
+{% endif %}
+
+    <li>
+        <a href="{% url 'abrir_caja' %}">
+        💵 Caja
+        </a>
+    </li>
+    
     <li>📈 Reportes</li>
+
+    <li>{% if request.user|tiene_rol:"Administrador" %}
+
+        <a href="{% url 'configuracion_negocio' %}">
+        ⚙️ Configuración
+        </a>
+
+        {% endif %}
+    </li>
+
 </ul>
         </nav>
+
+    <div class="usuario-sesion"
+     style="
+         margin-top: 25px;
+         padding: 15px;
+         border-top: 1px solid #444;
+     ">
+
+    <p style="margin-bottom: 10px;">
+        👤 <strong>{{ request.user.username }}</strong>
+    </p>
+
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            style="
+                width: 100%;
+                padding: 10px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+            "
+        >
+            🚪 Cerrar sesión
+        </button>
+    </form>
+
+</div>
 
     </div>
 

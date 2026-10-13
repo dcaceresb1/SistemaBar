@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nuevo cliente | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>👤 Nuevo cliente</h2>
+        <p>Registra los datos del cliente.</p>
+    </div>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button
+                type="submit"
+                class="btn-guardar">
+                💾 Guardar cliente
+            </button>
+
+            <a href="{% url 'lista_clientes' %}"
+               class="btn-cancelar">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

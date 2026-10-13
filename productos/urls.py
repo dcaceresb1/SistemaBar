@@ -196,4 +196,100 @@ path(
     views.eliminar_producto_venta,
     name='eliminar_producto_venta'
 ),
+
+path(
+    'ventas/<int:venta_id>/anular/',
+    views.anular_venta,
+    name='anular_venta'
+),
+
+path(
+    'ventas/<int:venta_id>/cancelar/',
+    views.cancelar_venta_borrador,
+    name='cancelar_venta_borrador'
+),
+
+path(
+    'clientes/',
+    views.lista_clientes,
+    name='lista_clientes'
+),
+
+path(
+    'clientes/nuevo/',
+    views.crear_cliente,
+    name='crear_cliente'
+),
+
+path(
+    'ventas/<int:venta_id>/cliente/',
+    views.asignar_cliente_venta,
+    name='asignar_cliente_venta'
+),
+
+path(
+    'ventas/<int:venta_id>/cliente/quitar/',
+    views.quitar_cliente_venta,
+    name='quitar_cliente_venta'
+),
+
+path(
+    'ventas/<int:venta_id>/cliente/nuevo/',
+    views.crear_cliente_venta,
+    name='crear_cliente_venta'
+),
+
+path(
+    'ventas/<int:venta_id>/cliente/consumidor-final/',
+    views.asignar_consumidor_final,
+    name='asignar_consumidor_final'
+),
+
+path(
+    'ventas/<int:venta_id>/cobrar/',
+    views.cobrar_venta,
+    name='cobrar_venta'
+),
+
+path(
+    'ventas/<int:venta_id>/comprobante/',
+    views.comprobante_venta,
+    name='comprobante_venta'
+),
+
+path(
+    'configuracion/',
+    views.configuracion_negocio,
+    name='configuracion_negocio'
+),
+
+path(
+    'caja/',
+    views.abrir_caja,
+    name='abrir_caja'
+),
+
+path(
+    'caja/movimiento/',
+    views.registrar_movimiento_caja,
+    name='registrar_movimiento_caja'
+),
+
+path(
+    'caja/cerrar/',
+    views.cerrar_caja,
+    name='cerrar_caja'
+),
+
+path(
+    'caja/historial/',
+    views.historial_cajas,
+    name='historial_cajas'
+),
+
+path(
+    'caja/<int:caja_id>/',
+    views.detalle_caja,
+    name='detalle_caja'
+),
     ]

@@ -3,8 +3,10 @@
 {% block title %}
 Dashboard | SistemaBar
 {% endblock %}
-
 {% block content %}
+{% load static %}
+{% load permisos %}
+
 
 <div class="dashboard-header">
     <div>
@@ -13,21 +15,24 @@ Dashboard | SistemaBar
     </div>
 </div>
 
+{% if request.user|tiene_rol:"Administrador" or request.user|tiene_rol:"Cajero" %}
 <div class="cards">
-
     <div class="card">
         <div class="card-icon">💰</div>
         <div>
             <p>Ventas de hoy</p>
-            <h2>$0.00</h2>
+            <h2>$ {{ ventas_dia|floatformat:2 }}</h2>
         </div>
     </div>
+{% endif %}
 
+{% if request.user|tiene_rol:"Administrador" or request.user|tiene_rol:"Inventario" %}
+<div class="cards">
     <div class="card">
         <div class="card-icon">🍺</div>
         <div>
             <p>Productos</p>
-            <h2>{{ total_productos }}</h2>
+            <h2>{{ total_productos}}</h2>
         </div>
     </div>
 
@@ -46,7 +51,8 @@ Dashboard | SistemaBar
             <h2>${{ valor_inventario|floatformat:2 }}</h2>
         </div>
     </div>
-
 </div>
+</div>
+{% endif %}
 
 {% endblock %}

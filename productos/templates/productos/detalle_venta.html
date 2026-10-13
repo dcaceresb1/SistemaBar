@@ -15,6 +15,21 @@ Venta #{{ venta.id }} | SistemaBar
             Estado:
             <strong>{{ venta.get_estado_display }}</strong>
         </p>
+
+        {% if venta.usuario %}
+
+        <p>
+        <strong>Atendido por:</strong>
+
+        {% if venta.usuario.get_full_name %}
+            {{ venta.usuario.get_full_name }}
+        {% else %}
+            {{ venta.usuario.username }}
+        {% endif %}
+
+        </p>
+
+{% endif %}
     </div>
 
     <a href="{% url 'lista_ventas' %}"
@@ -22,10 +37,164 @@ Venta #{{ venta.id }} | SistemaBar
         ← Volver
     </a>
 
+    {% if venta.estado == "BORRADOR" %}
+
+    <form
+        method="POST"
+        action="{% url 'cancelar_venta_borrador' venta.id %}"
+        style="display: inline;"
+    >
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn-desactivar"
+            onclick="return confirm('¿Cancelar esta venta? No se modificará el inventario.');"
+        >
+            ✖ Cancelar venta
+        </button>
+
+    </form>
+
+{% endif %}
+
 </div>
 
 
 {% if venta.estado == "BORRADOR" %}
+
+<!-- =========================================
+     CLIENTE DE LA VENTA
+     ========================================= -->
+
+<div class="formulario-contenedor">
+
+    <h3>👤 Cliente</h3>
+
+    {% if venta.cliente %}
+
+        <p>
+            <strong>
+                {{ venta.cliente.nombre }}
+            </strong>
+        </p>
+
+        <p>
+            Identificación:
+            {{ venta.cliente.identificacion }}
+        </p>
+
+        {% if venta.cliente.telefono %}
+            <p>
+                Teléfono:
+                {{ venta.cliente.telefono }}
+            </p>
+        {% endif %}
+
+        {% if venta.cliente.email %}
+            <p>
+                Correo:
+                {{ venta.cliente.email }}
+            </p>
+        {% endif %}
+
+
+        <!-- CAMBIAR CLIENTE -->
+
+        <form
+            method="POST"
+            action="{% url 'quitar_cliente_venta' venta.id %}"
+            style="margin-top: 15px;"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn-cancelar"
+                onclick="return confirm('¿Deseas cambiar el cliente de esta venta?');"
+            >
+                🔄 Cambiar cliente
+            </button>
+
+        </form>
+
+
+    {% else %}
+
+
+        {% if cliente_no_encontrado %}
+
+            <div style="margin-bottom: 15px;">
+
+                <p>
+                    ⚠️ No existe un cliente registrado con la identificación:
+                </p>
+
+                <p>
+                    <strong>
+                        {{ cliente_no_encontrado }}
+                    </strong>
+                </p>
+
+                <a
+                    href="{% url 'crear_cliente_venta' venta.id %}?identificacion={{ cliente_no_encontrado|urlencode }}"
+                    class="btn-nuevo"
+                >
+                    ➕ Registrar nuevo cliente
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- BUSCAR CLIENTE -->
+
+        <form
+            method="POST"
+            action="{% url 'asignar_cliente_venta' venta.id %}"
+            class="form-busqueda"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="identificacion"
+                placeholder="Cédula, RUC o pasaporte"
+                required
+            >
+
+            <button
+                type="submit"
+                class="btn-buscar"
+            >
+                🔎 Buscar cliente
+            </button>
+
+        </form>
+
+        <form
+             method="POST"
+             action="{% url 'asignar_consumidor_final' venta.id %}"
+             style="margin-top: 15px;"
+>
+
+             {% csrf_token %}
+
+             <button
+                  type="submit"
+                 class="btn-cancelar"
+    >
+                 👤 Usar Consumidor Final
+             </button>
+
+    </form>
+
+    {% endif %}
+
+</div>
 
 <div class="pos-container">
 
@@ -35,11 +204,63 @@ Venta #{{ venta.id }} | SistemaBar
 
         <h3>Productos</h3>
 
+        <form method="GET" class="form-busqueda">
+
+    <input
+        type="text"
+        name="buscar"
+        placeholder="Buscar por nombre o código..."
+        value="{{ busqueda }}"
+    >
+
+    <select name="categoria">
+
+        <option value="">
+            Todas las categorías
+        </option>
+
+        {% for categoria in categorias %}
+
+            <option
+                value="{{ categoria.id }}"
+                {% if categoria_seleccionada == categoria.id|stringformat:"s" %}
+                    selected
+                {% endif %}
+            >
+                {{ categoria.nombre }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <button type="submit" class="btn-buscar">
+        🔎 Buscar
+    </button>
+
+    {% if busqueda or categoria_seleccionada %}
+    
+        <a
+            href="{% url 'detalle_venta' venta.id %}"
+            class="btn-limpiar"
+        >
+            Limpiar
+        </a>
+    {% endif %}
+
+
+
+</form>
+
+<!-- TABLA PRODUCTOS -->
+
         <div class="pos-grid">
 
             {% for producto in productos %}
 
                 <a href="{% url 'agregar_producto_pos' venta.id producto.id %}"
+
+
                    class="pos-producto">
 
                     <strong>
@@ -157,6 +378,262 @@ Venta #{{ venta.id }} | SistemaBar
 
 </div>
 
+<!-- TOTAL DE LA VENTA -->
+
+<div class="pos-total">
+
+    <span>
+        Total
+    </span>
+
+    <strong>
+        $ {{ total }}
+    </strong>
+
+</div>
+
+
+<!-- BOTÓN COBRAR -->
+
+{% if detalles %}
+
+    <a
+        href="{% url 'cobrar_venta' venta.id %}"
+        class="btn-guardar"
+        style="
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+            box-sizing: border-box;
+            text-decoration: none;
+        "
+    >
+        💵 COBRAR $ {{ total|floatformat:2 }}
+    </a>
+
 {% endif %}
+
+
+        </div>
+    <!-- FIN CUENTA -->
+
+</div>
+<!-- FIN POS -->
+
+
+{% else %}
+
+{% if venta.cliente %}
+
+    <div
+        class="formulario-contenedor"
+        style="margin-top: 20px;"
+    >
+
+        <h3>👤 Cliente</h3>
+
+        <p>
+            <strong>
+                {{ venta.cliente.nombre }}
+            </strong>
+        </p>
+
+        <p>
+            <strong>Identificación:</strong>
+            {{ venta.cliente.identificacion }}
+        </p>
+
+        {% if venta.cliente.telefono %}
+
+            <p>
+                <strong>Teléfono:</strong>
+                {{ venta.cliente.telefono }}
+            </p>
+
+        {% endif %}
+
+        {% if venta.cliente.email %}
+
+            <p>
+                <strong>Correo:</strong>
+                {{ venta.cliente.email }}
+            </p>
+
+        {% endif %}
+
+    </div>
+
+{% endif %}
+
+<!-- =========================================
+     VENTA CONFIRMADA / ANULADA
+     ========================================= -->
+
+<div class="formulario-contenedor">
+
+    <h3>🧾 Detalle de la venta</h3>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-productos">
+
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for detalle in detalles %}
+
+                    <tr>
+
+                        <td>
+                            {{ detalle.producto.nombre }}
+
+                            {% if detalle.producto.presentacion %}
+                                <br>
+                                <small>
+                                    {{ detalle.producto.presentacion }}
+                                </small>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ detalle.cantidad }}
+                        </td>
+
+                        <td>
+                            $ {{ detalle.precio_unitario }}
+                        </td>
+
+                        <td>
+                            $ {{ detalle.subtotal }}
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+                        <td colspan="4">
+                            Esta venta no tiene productos registrados.
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="pos-total">
+
+        <span>
+            Total de la venta
+        </span>
+
+        <strong>
+            $ {{ total }}
+        </strong>
+
+    </div>
+
+{% if venta.estado == "CONFIRMADA" %}
+
+    <form
+        method="POST"
+        action="{% url 'anular_venta' venta.id %}"
+        style="margin-top: 20px;"
+    >
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn-desactivar"
+            onclick="return confirm('¿Está seguro de anular esta venta? Los productos serán devueltos al inventario.');"
+        >
+            🚫 ANULAR VENTA
+        </button>
+
+        <a
+            href="{% url 'comprobante_venta' venta.id %}"
+            class="btn-guardar"
+            target="_blank"
+>
+            🧾 Ver comprobante
+        </a>
+
+    </form>
+
+{% endif %}
+
+{% if pago %}
+
+    <div
+        class="formulario-contenedor"
+        style="margin-top: 20px;"
+    >
+
+        <h3>💳 Información del pago</h3>
+
+        <p>
+            <strong>Método:</strong>
+            {{ pago.get_metodo_display }}
+        </p>
+
+        <p>
+            <strong>Total pagado:</strong>
+            $ {{ pago.monto|floatformat:2 }}
+        </p>
+
+
+        {% if pago.metodo == 'EFECTIVO' %}
+
+            <p>
+                <strong>Monto recibido:</strong>
+                $ {{ pago.monto_recibido|floatformat:2 }}
+            </p>
+
+            <p>
+                <strong>Cambio:</strong>
+                $ {{ pago.cambio|floatformat:2 }}
+            </p>
+
+        {% endif %}
+
+
+        {% if pago.referencia %}
+
+            <p>
+                <strong>Referencia:</strong>
+                {{ pago.referencia }}
+            </p>
+
+        {% endif %}
+
+
+        <p>
+            <strong>Fecha del pago:</strong>
+            {{ pago.fecha|date:"d/m/Y H:i" }}
+        </p>
+
+    </div>
+
+{% endif %}
+
+</div>
+
+{% endif %}
+
 
 {% endblock %}

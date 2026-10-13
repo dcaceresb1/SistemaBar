@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Clientes | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>👥 Clientes</h2>
+        <p>Administración de clientes registrados.</p>
+    </div>
+
+    <a href="{% url 'crear_cliente' %}"
+       class="btn-nuevo">
+        + Nuevo cliente
+    </a>
+
+</div>
+
+
+<div class="filtros-productos">
+
+    <form method="GET" class="form-busqueda">
+
+        <input
+            type="text"
+            name="buscar"
+            placeholder="Buscar por identificación o nombre..."
+            value="{{ busqueda }}"
+        >
+
+        <button type="submit" class="btn-buscar">
+            🔎 Buscar
+        </button>
+
+        {% if busqueda %}
+            <a href="{% url 'lista_clientes' %}"
+               class="btn-limpiar">
+                Limpiar
+            </a>
+        {% endif %}
+
+    </form>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Identificación</th>
+                <th>Nombre / Razón social</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for cliente in clientes %}
+
+                <tr>
+
+                    <td>
+                        {{ cliente.identificacion }}
+                    </td>
+
+                    <td>
+                        {{ cliente.nombre }}
+                    </td>
+
+                    <td>
+                        {{ cliente.telefono|default:"-" }}
+                    </td>
+
+                    <td>
+                        {{ cliente.email|default:"-" }}
+                    </td>
+
+                    <td>
+
+                        {% if cliente.activo %}
+                            <span class="estado estado-activo">
+                                Activo
+                            </span>
+                        {% else %}
+                            <span class="estado estado-inactivo">
+                                Inactivo
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="5">
+                        No existen clientes registrados.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

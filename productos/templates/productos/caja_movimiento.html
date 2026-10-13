@@ -1,0 +1,169 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Movimiento de caja | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>💰 Movimiento de caja</h2> <br>
+            <p>
+                &nbsp;Caja #{{ caja_abierta.id }}
+            </p>
+    </div>
+<br>
+    <a
+        href="{% url 'abrir_caja' %}"
+        class="btn-cancelar"
+    >
+        ← Volver a Caja
+    </a>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <h3>Registrar movimiento</h3>
+
+    {% if error %}
+
+        <div style="
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #f8d7da;
+            border-radius: 6px;
+        ">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <div style="margin-bottom: 15px;">
+
+            <label>
+                <strong>Tipo</strong>
+            </label>
+
+            <select
+                name="tipo"
+                required
+            >
+
+                <option value="">
+                    Seleccionar...
+                </option>
+
+                <option value="INGRESO">
+                    Ingreso
+                </option>
+
+                <option value="EGRESO">
+                    Egreso
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div style="margin-bottom: 15px;">
+
+            <label>
+                <strong>Concepto</strong>
+            </label>
+
+            <select
+                name="concepto"
+                required
+            >
+
+                <option value="">
+                    Seleccionar...
+                </option>
+
+                <option value="INGRESO_MANUAL">
+                    Ingreso manual
+                </option>
+
+                <option value="RETIRO">
+                    Retiro de efectivo
+                </option>
+
+                <option value="GASTO">
+                    Gasto
+                </option>
+
+                <option value="OTRO">
+                    Otro
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div style="margin-bottom: 15px;">
+
+            <label>
+                <strong>Monto</strong>
+            </label>
+
+            <input
+                type="number"
+                name="monto"
+                min="0.01"
+                step="0.01"
+                required
+            >
+
+        </div>
+
+
+        <div style="margin-bottom: 15px;">
+
+            <label>
+                <strong>Observación</strong>
+            </label>
+
+            <textarea
+                name="observacion"
+                rows="3"
+                placeholder="Opcional"
+            ></textarea>
+
+        </div>
+
+
+        <div class="formulario-acciones">
+
+            <button
+                type="submit"
+                class="btn-guardar"
+            >
+                💾 Registrar movimiento
+            </button>
+
+            <a
+                href="{% url 'abrir_caja' %}"
+                class="btn-cancelar"
+            >
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

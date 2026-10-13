@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Venta no cobrable | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="formulario-contenedor">
+
+    <h2>⚠️ No se puede cobrar la venta</h2>
+
+    <p>
+        {{ mensaje }}
+    </p>
+
+    <p>
+        <strong>Venta:</strong>
+        #{{ venta.id }}
+    </p>
+
+    {% if venta.caja_id %}
+
+        <p>
+            <strong>Caja:</strong>
+            #{{ venta.caja_id }}
+        </p>
+
+    {% endif %}
+
+    <div class="formulario-acciones">
+
+        <a
+            href="{% url 'detalle_venta' venta.id %}"
+            class="btn-cancelar"
+        >
+            ← Volver a la venta
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

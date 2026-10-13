@@ -1,0 +1,209 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Caja | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+    <div>
+        <h2>💵 Caja</h2>
+        <p>Control de apertura y cierre de caja.</p>
+    </div>
+
+    <a
+    href="{% url 'historial_cajas' %}"
+    class="btn-cancelar"
+>
+    <h2>📋 Historial de cajas</h2>  
+    </a>
+
+</div>
+
+
+
+
+{% if caja_abierta %}
+
+    <div class="formulario-contenedor">
+
+        <h3>🟢 Caja abierta</h3>
+
+        <p>
+            <strong>Caja:</strong>
+            #{{ caja_abierta.id }}
+        </p>
+
+        <p>
+            <strong>Abierta por:</strong>
+
+            {% if caja_abierta.abierta_por.get_full_name %}
+                {{ caja_abierta.abierta_por.get_full_name }}
+            {% else %}
+                {{ caja_abierta.abierta_por.username }}
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Fecha de apertura:</strong>
+            {{ caja_abierta.fecha_apertura|date:"d/m/Y H:i" }}
+        </p>
+
+        <p>
+            <strong>Saldo inicial:</strong>
+            $ {{ caja_abierta.saldo_inicial|floatformat:2 }}
+        </p>
+
+        {% if caja_abierta.observacion %}
+
+            <p>
+                <strong>Observación:</strong>
+                {{ caja_abierta.observacion }}
+            </p>
+
+        {% endif %}
+
+        <hr style="margin: 25px 0;">
+
+<h3>🧾 Resumen de ventas</h3>
+
+<p>
+    <strong>Ventas en efectivo:</strong>
+    $ {{ ventas_efectivo|floatformat:2 }}
+</p>
+
+<p>
+    <strong>Ventas por transferencia:</strong>
+    $ {{ ventas_transferencia|floatformat:2 }}
+</p>
+
+<p>
+    <strong>Ventas con tarjeta:</strong>
+    $ {{ ventas_tarjeta|floatformat:2 }}
+</p>
+
+<p>
+    <strong>Total vendido:</strong>
+    $ {{ total_vendido|floatformat:2 }}
+</p>
+
+
+<hr style="margin: 25px 0;">
+
+<h3>💰 Movimientos de efectivo</h3>
+
+<p>
+    <strong>Ingresos adicionales:</strong>
+    $ {{ ingresos|floatformat:2 }}
+</p>
+
+<p>
+    <strong>Egresos / retiros:</strong>
+    $ {{ egresos|floatformat:2 }}
+</p>
+
+<hr style="margin: 25px 0;">
+
+<h3>💵 Efectivo esperado</h3>
+
+<p style="font-size: 24px;">
+    <strong>
+        $ {{ efectivo_esperado|floatformat:2 }}
+    </strong>
+</p>
+
+<div style="margin-top: 25px;">
+
+    <a
+        href="{% url 'registrar_movimiento_caja' %}"
+        class="btn-nuevo"
+    >
+        ➕ Registrar movimiento
+    </a>
+
+    <a
+        href="{% url 'cerrar_caja' %}"
+        class="btn-desactivar"
+        style="margin-left: 10px;"
+>
+        🔒 Cerrar caja
+</a>
+    
+</div>
+
+    </div>
+
+{% else %}
+
+    <div class="formulario-contenedor">
+
+        <h3>🔓 Abrir caja</h3>
+
+        <p>
+            Ingresa el efectivo disponible al iniciar
+            la jornada.
+        </p>
+
+        {% if error %}
+
+            <div style="
+                padding: 12px;
+                margin-bottom: 15px;
+                background: #f8d7da;
+                border-radius: 6px;
+            ">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div style="margin-bottom: 15px;">
+
+                <label>
+                    <strong>Saldo inicial</strong>
+                </label>
+
+                <input
+                    type="number"
+                    name="saldo_inicial"
+                    min="0"
+                    step="0.01"
+                    value="0.00"
+                    required
+                >
+
+            </div>
+
+            <div style="margin-bottom: 15px;">
+
+                <label>
+                    <strong>Observación</strong>
+                </label>
+
+                <textarea
+                    name="observacion"
+                    rows="3"
+                    placeholder="Opcional"
+                ></textarea>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-guardar"
+            >
+                🔓 ABRIR CAJA
+            </button>
+
+        </form>
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

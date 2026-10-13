@@ -1,0 +1,162 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Cerrar caja | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>🔒 Cerrar Caja #{{ caja.id }}</h2>
+        <p>Arqueo y cierre de caja.</p>
+    </div>
+
+    <a
+        href="{% url 'abrir_caja' %}"
+        class="btn-cancelar"
+    >
+        ← Volver
+    </a>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <h3>📊 Resumen</h3>
+
+    <p>
+        <strong>Saldo inicial:</strong>
+        $ {{ caja.saldo_inicial|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ventas en efectivo:</strong>
+        $ {{ ventas_efectivo|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ventas por transferencia:</strong>
+        $ {{ ventas_transferencia|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ventas con tarjeta:</strong>
+        $ {{ ventas_tarjeta|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Total vendido:</strong>
+        $ {{ total_vendido|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ingresos adicionales:</strong>
+        $ {{ ingresos|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Egresos / retiros:</strong>
+        $ {{ egresos|floatformat:2 }}
+    </p>
+
+    <hr>
+
+    <p style="font-size: 22px;">
+        <strong>Efectivo esperado:</strong>
+        $ {{ efectivo_esperado|floatformat:2 }}
+    </p>
+
+
+    {% if error %}
+
+        <div style="
+            padding: 12px;
+            margin: 15px 0;
+            background: #f8d7da;
+            border-radius: 6px;
+        ">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div style="margin-top: 20px;">
+
+            <label>
+                <strong>
+                    💵 Efectivo contado físicamente
+                </strong>
+            </label>
+
+            <input
+                type="number"
+                name="efectivo_contado"
+                min="0"
+                step="0.01"
+                required
+                style="margin-top: 8px;"
+            >
+
+        </div>
+
+
+        {% if ventas_pendientes > 0 %}
+
+            <div class="formulario-contenedor">
+
+                <h3>⚠️ Ventas pendientes</h3>
+
+                <p>
+                Existen
+                <strong>{{ ventas_pendientes }}</strong>
+                venta(s) en borrador asociadas a esta caja.
+                </p>
+
+                <p>
+                Debes cobrarlas o cancelarlas antes de cerrar la caja.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <div
+            class="formulario-acciones"
+            style="margin-top: 25px;"
+        >
+
+            <button
+                type="submit"
+                class="btn-desactivar"
+                onclick="
+                    return confirm(
+                        '¿Confirmas el cierre de esta caja?'
+                    );
+                "
+            >
+                🔒 CERRAR CAJA
+            </button>
+
+            <a
+                href="{% url 'abrir_caja' %}"
+                class="btn-cancelar"
+            >
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

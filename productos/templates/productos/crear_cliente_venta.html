@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Nuevo cliente | Venta #{{ venta.id }}
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <div>
+        <h2>👤 Registrar cliente</h2>
+
+        <p>
+            Venta #{{ venta.id }}
+        </p>
+    </div>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="formulario-acciones">
+
+            <button
+                type="submit"
+                class="btn-guardar"
+            >
+                💾 Guardar y asignar
+            </button>
+
+            <a
+                href="{% url 'detalle_venta' venta.id %}"
+                class="btn-cancelar"
+            >
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

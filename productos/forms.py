@@ -9,6 +9,8 @@ from .models import (
     DetalleCompra,
     Venta,
     DetalleVenta,
+    Cliente,
+    ConfiguracionNegocio,
 )
 
 
@@ -197,4 +199,54 @@ class DetalleVentaForm(forms.ModelForm):
         self.fields['cantidad'].widget.attrs.update({
             'min': 1
         })
+
+class ClienteForm(forms.ModelForm):
+
+    class Meta:
+        model = Cliente
+
+        fields = [
+            'tipo_identificacion',
+            'identificacion',
+            'nombre',
+            'telefono',
+            'email',
+            'direccion',
+            'activo',
+        ]
+
+        widgets = {
+            'direccion': forms.Textarea(
+                attrs={'rows': 3}
+            ),
+        }
+
+
+class ConfiguracionNegocioForm(forms.ModelForm):
+
+    class Meta:
+
+        model = ConfiguracionNegocio
+
+        fields = [
+            'nombre_comercial',
+            'razon_social',
+            'ruc',
+            'direccion',
+            'telefono',
+            'email',
+            'logo',
+            'mensaje_comprobante',
+        ]
+
+        widgets = {
+            'direccion': forms.Textarea(
+                attrs={'rows': 3}
+            ),
+            'mensaje_comprobante': forms.TextInput(
+                attrs={
+                    'placeholder': '¡Gracias por su compra!'
+                }
+            ),
+        }
         

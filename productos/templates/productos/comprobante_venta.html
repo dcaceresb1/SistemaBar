@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Comprobante venta #{{ venta.id }}
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #000;
+        }
+
+        .comprobante {
+            width: 80mm;
+            max-width: 100%;
+            margin: auto;
+            padding: 15px;
+            background: white;
+        }
+
+        .centrado {
+            text-align: center;
+        }
+
+        .negocio h2 {
+            margin: 0 0 5px 0;
+        }
+
+        .negocio p {
+            margin: 3px 0;
+            font-size: 12px;
+        }
+
+        .separador {
+            border-top: 1px dashed #000;
+            margin: 12px 0;
+        }
+
+        .datos {
+            font-size: 12px;
+        }
+
+        .datos p {
+            margin: 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        th {
+            text-align: left;
+            padding: 4px 2px;
+            border-bottom: 1px solid #000;
+        }
+
+        td {
+            padding: 5px 2px;
+            vertical-align: top;
+        }
+
+        .numero {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .total {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .acciones {
+            width: 80mm;
+            max-width: 100%;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .acciones button,
+        .acciones a {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 4px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .imprimir {
+            background: #222;
+            color: white;
+        }
+
+        .volver {
+            background: #ddd;
+            color: #000;
+        }
+
+
+        @media print {
+
+            @page {
+                margin: 0;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .comprobante {
+                width: 80mm;
+                padding: 5mm;
+                margin: 0;
+            }
+
+            .acciones {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="comprobante">
+
+
+   <!-- DATOS DEL NEGOCIO -->
+
+<div class="negocio centrado">
+
+    {% if configuracion and configuracion.logo %}
+
+    <img
+        src="{{ configuracion.logo.url }}"
+        alt="Logo"
+        style="
+            max-width: 45mm;
+            max-height: 25mm;
+            object-fit: contain;
+            margin-bottom: 8px;
+        "
+    >
+
+{% endif %}
+
+    {% if configuracion %}
+
+        <h2>
+            {{ configuracion.nombre_comercial }}
+        </h2>
+
+        {% if configuracion.razon_social %}
+            <p>
+                {{ configuracion.razon_social }}
+            </p>
+        {% endif %}
+
+        {% if configuracion.ruc %}
+            <p>
+                RUC: {{ configuracion.ruc }}
+            </p>
+        {% endif %}
+
+        {% if configuracion.direccion %}
+            <p>
+                {{ configuracion.direccion }}
+            </p>
+        {% endif %}
+
+        {% if configuracion.telefono %}
+            <p>
+                Tel: {{ configuracion.telefono }}
+            </p>
+        {% endif %}
+
+        {% if configuracion.email %}
+            <p>
+                {{ configuracion.email }}
+            </p>
+        {% endif %}
+
+    {% else %}
+
+        <h2>
+            SISTEMABAR
+        </h2>
+
+    {% endif %}
+
+    <p>
+        <strong>COMPROBANTE INTERNO</strong>
+    </p>
+
+</div>
+
+
+    <div class="separador"></div>
+
+
+<!-- DATOS DE LA VENTA -->
+
+<div class="datos">
+
+        <p>
+            <strong>Venta:</strong>
+            #{{ venta.id }}
+        </p>
+
+        <p>
+            <strong>Fecha:</strong>
+            {{ venta.fecha|date:"d/m/Y H:i" }}
+        </p>
+
+
+        {% if venta.cliente %}
+
+            <p>
+                <strong>Cliente:</strong>
+                {{ venta.cliente.nombre }}
+            </p>
+
+            <p>
+                <strong>Identificación:</strong>
+                {{ venta.cliente.identificacion }}
+            </p>
+
+        {% endif %}
+
+        {% if venta.usuario %}
+            <div>
+                <strong>Atendido por:</strong>
+                {% if venta.usuario.get_full_name %}
+                {{ venta.usuario.get_full_name }}
+                {% else %}
+                {{ venta.usuario.username }}
+        {% endif %}
+    </div>
+{% endif %}
+    </div>
+
+
+    <div class="separador"></div>
+
+
+    <!-- PRODUCTOS -->
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Producto
+                </th>
+
+                <th class="numero">
+                    Cant.
+                </th>
+
+                <th class="numero">
+                    Total
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for detalle in detalles %}
+
+                <tr>
+
+                    <td>
+
+                        {{ detalle.producto.nombre }}
+
+                        <br>
+
+                        <small>
+                            ${{ detalle.precio_unitario|floatformat:2 }}
+                            c/u
+                        </small>
+
+                    </td>
+
+                    <td class="numero">
+                        {{ detalle.cantidad }}
+                    </td>
+
+                    <td class="numero">
+                        ${{ detalle.subtotal|floatformat:2 }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    <div class="separador"></div>
+
+
+    <!-- TOTAL -->
+
+    <div class="total">
+
+        TOTAL:
+        ${{ total|floatformat:2 }}
+
+    </div>
+
+
+    {% if pago %}
+
+        <div class="separador"></div>
+
+
+        <!-- INFORMACIÓN DEL PAGO -->
+
+        <div class="datos">
+
+            <p>
+                <strong>Forma de pago:</strong>
+                {{ pago.get_metodo_display }}
+            </p>
+
+
+            {% if pago.metodo == 'EFECTIVO' %}
+
+                <p>
+                    <strong>Recibido:</strong>
+                    ${{ pago.monto_recibido|floatformat:2 }}
+                </p>
+
+                <p>
+                    <strong>Cambio:</strong>
+                    ${{ pago.cambio|floatformat:2 }}
+                </p>
+
+            {% endif %}
+
+
+            {% if pago.referencia %}
+
+                <p>
+                    <strong>Referencia:</strong>
+                    {{ pago.referencia }}
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+
+    <div class="separador"></div>
+
+
+    <!-- PIE -->
+
+    <div class="centrado datos">
+
+{% if configuracion and configuracion.mensaje_comprobante %}
+
+    <p>
+        <strong>
+            {{ configuracion.mensaje_comprobante }}
+        </strong>
+    </p>
+
+{% else %}
+
+    <p>
+        <strong>
+            ¡Gracias por su compra!
+        </strong>
+    </p>
+
+{% endif %}
+
+        <p>
+            Este documento es un comprobante interno.
+        </p>
+
+        <p>
+            No constituye una factura electrónica.
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<!-- BOTONES QUE NO SE IMPRIMEN -->
+
+<div class="acciones">
+
+    <button
+        type="button"
+        class="imprimir"
+        onclick="window.print();"
+    >
+        🖨️ Imprimir
+    </button>
+
+
+    <a
+        href="{% url 'detalle_venta' venta.id %}"
+        class="volver"
+    >
+        ← Volver a la venta
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

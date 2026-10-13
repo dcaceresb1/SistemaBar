@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Venta no anulable | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="formulario-contenedor">
+
+    <h2>⚠️ No se puede anular la venta</h2>
+
+    <p>
+        {{ mensaje }}
+    </p>
+
+    <p>
+        <strong>Venta:</strong>
+        #{{ venta.id }}
+    </p>
+
+    {% if venta.caja %}
+
+        <p>
+            <strong>Caja:</strong>
+            #{{ venta.caja.id }}
+        </p>
+
+        <p>
+            <strong>Estado de caja:</strong>
+            {{ venta.caja.get_estado_display }}
+        </p>
+
+    {% endif %}
+
+    <div class="formulario-acciones">
+
+        <a
+            href="{% url 'detalle_venta' venta.id %}"
+            class="btn-cancelar"
+        >
+            ← Volver a la venta
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Iniciar sesión | SistemaBar</title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'core/css/estilos.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <div
+        class="formulario-contenedor"
+        style="
+            max-width: 420px;
+            margin: 80px auto;
+        "
+    >
+
+        <h2 style="text-align: center;">
+            🍻 SistemaBar
+        </h2>
+
+        <h3 style="text-align: center;">
+            🔐 Iniciar sesión
+        </h3>
+
+
+        {% if form.errors %}
+
+            <p style="text-align: center;">
+                ⚠️ Usuario o contraseña incorrectos.
+            </p>
+
+        {% endif %}
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <p>
+                <label for="{{ form.username.id_for_label }}">
+                    Usuario:
+                </label>
+
+                {{ form.username }}
+            </p>
+
+            <p>
+                <label for="{{ form.password.id_for_label }}">
+                    Contraseña:
+                </label>
+
+                {{ form.password }}
+            </p>
+
+
+            <button
+                type="submit"
+                class="btn-guardar"
+                style="width: 100%;"
+            >
+                🔐 Ingresar
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,327 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Caja #{{ caja.id }} | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>💵 Caja #{{ caja.id }}</h2>
+
+        <p>
+            Estado:
+            <strong>{{ caja.get_estado_display }}</strong>
+        </p>
+    </div>
+
+    <a
+        href="{% url 'historial_cajas' %}"
+        class="btn-cancelar"
+    >
+        ← Volver al historial
+    </a>
+
+</div>
+
+
+<div class="formulario-contenedor">
+
+    <h3>📋 Información de la caja</h3>
+
+    <p>
+        <strong>Abierta por:</strong>
+
+        {% if caja.abierta_por.get_full_name %}
+            {{ caja.abierta_por.get_full_name }}
+        {% else %}
+            {{ caja.abierta_por.username }}
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Fecha de apertura:</strong>
+        {{ caja.fecha_apertura|date:"d/m/Y H:i" }}
+    </p>
+
+    <p>
+        <strong>Saldo inicial:</strong>
+        $ {{ caja.saldo_inicial|floatformat:2 }}
+    </p>
+
+    {% if caja.fecha_cierre %}
+
+        <p>
+            <strong>Fecha de cierre:</strong>
+            {{ caja.fecha_cierre|date:"d/m/Y H:i" }}
+        </p>
+
+    {% endif %}
+
+    {% if caja.cerrada_por %}
+
+        <p>
+            <strong>Cerrada por:</strong>
+
+            {% if caja.cerrada_por.get_full_name %}
+                {{ caja.cerrada_por.get_full_name }}
+            {% else %}
+                {{ caja.cerrada_por.username }}
+            {% endif %}
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<div
+    class="formulario-contenedor"
+    style="margin-top: 20px;"
+>
+
+    <h3>🧾 Resumen de ventas</h3>
+
+    <p>
+        <strong>Efectivo:</strong>
+        $ {{ ventas_efectivo|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Transferencias:</strong>
+        $ {{ ventas_transferencia|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Tarjetas:</strong>
+        $ {{ ventas_tarjeta|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Total vendido:</strong>
+        $ {{ total_vendido|floatformat:2 }}
+    </p>
+
+</div>
+
+
+<div
+    class="formulario-contenedor"
+    style="margin-top: 20px;"
+>
+
+    <h3>🛒 Ventas de la caja</h3>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-productos">
+
+            <thead>
+                <tr>
+                    <th>Venta</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Método</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for pago in pagos %}
+
+                    <tr>
+
+                        <td>
+                            <a href="{% url 'detalle_venta' pago.venta.id %}">
+                                #{{ pago.venta.id }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ pago.fecha|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td>
+
+                            {% if pago.venta.usuario %}
+
+                                {% if pago.venta.usuario.get_full_name %}
+                                    {{ pago.venta.usuario.get_full_name }}
+                                {% else %}
+                                    {{ pago.venta.usuario.username }}
+                                {% endif %}
+
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ pago.get_metodo_display }}
+                        </td>
+
+                        <td>
+                            $ {{ pago.monto|floatformat:2 }}
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+                        <td colspan="5">
+                            No existen ventas registradas en esta caja.
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div
+    class="formulario-contenedor"
+    style="margin-top: 20px;"
+>
+
+    <h3>💰 Movimientos de caja</h3>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-productos">
+
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Concepto</th>
+                    <th>Usuario</th>
+                    <th>Monto</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for movimiento in movimientos %}
+
+                    <tr>
+
+                        <td>
+                            {{ movimiento.fecha|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td>
+                            {{ movimiento.get_tipo_display }}
+                        </td>
+
+                        <td>
+                            {{ movimiento.get_concepto_display }}
+                        </td>
+
+                        <td>
+
+                            {% if movimiento.usuario.get_full_name %}
+                                {{ movimiento.usuario.get_full_name }}
+                            {% else %}
+                                {{ movimiento.usuario.username }}
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            $ {{ movimiento.monto|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {{ movimiento.observacion|default:"—" }}
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+                        <td colspan="6">
+                            No existen movimientos manuales.
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div
+    class="formulario-contenedor"
+    style="margin-top: 20px;"
+>
+
+    <h3>🔒 Resultado de caja</h3>
+
+    <p>
+        <strong>Saldo inicial:</strong>
+        $ {{ caja.saldo_inicial|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ventas en efectivo:</strong>
+        $ {{ ventas_efectivo|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Ingresos:</strong>
+        $ {{ ingresos|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Egresos:</strong>
+        $ {{ egresos|floatformat:2 }}
+    </p>
+
+    <hr>
+
+    <p>
+        <strong>Efectivo calculado:</strong>
+        $ {{ efectivo_calculado|floatformat:2 }}
+    </p>
+
+
+    {% if caja.estado == 'CERRADA' %}
+
+        <p>
+            <strong>Efectivo esperado al cierre:</strong>
+            $ {{ caja.efectivo_esperado|floatformat:2 }}
+        </p>
+
+        <p>
+            <strong>Efectivo contado:</strong>
+            $ {{ caja.efectivo_contado|floatformat:2 }}
+        </p>
+
+        <p style="font-size: 20px;">
+            <strong>Diferencia:</strong>
+            $ {{ caja.diferencia|floatformat:2 }}
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Historial de cajas | SistemaBar
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header encabezado-acciones">
+
+    <div>
+        <h2>📋 Historial de cajas</h2>
+        <p>
+            Aperturas y cierres registrados en el sistema.
+        </p>
+    </div>
+
+    <a
+        href="{% url 'abrir_caja' %}"
+        class="btn-cancelar"
+    >
+        ← Volver a Caja
+    </a>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table class="tabla-productos">
+
+        <thead>
+            <tr>
+                <th>Caja</th>
+                <th>Apertura</th>
+                <th>Abierta por</th>
+                <th>Saldo inicial</th>
+                <th>Estado</th>
+                <th>Cierre</th>
+                <th>Cerrada por</th>
+                <th>Esperado</th>
+                <th>Contado</th>
+                <th>Diferencia</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for caja in cajas %}
+
+                <tr>
+
+                    <td>
+                    <a href="{% url 'detalle_caja' caja.id %}">
+                    <strong>#{{ caja.id }}</strong>
+                    </a>
+                    </td>
+
+                    <td>
+                        {{ caja.fecha_apertura|date:"d/m/Y H:i" }}
+                    </td>
+
+                    <td>
+                        {% if caja.abierta_por.get_full_name %}
+                            {{ caja.abierta_por.get_full_name }}
+                        {% else %}
+                            {{ caja.abierta_por.username }}
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        $ {{ caja.saldo_inicial|floatformat:2 }}
+                    </td>
+
+                    <td>
+                        {% if caja.estado == 'ABIERTA' %}
+                            <span class="estado estado-activo">
+                                Abierta
+                            </span>
+                        {% else %}
+                            <span class="estado estado-inactivo">
+                                Cerrada
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if caja.fecha_cierre %}
+                            {{ caja.fecha_cierre|date:"d/m/Y H:i" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if caja.cerrada_por %}
+
+                            {% if caja.cerrada_por.get_full_name %}
+                                {{ caja.cerrada_por.get_full_name }}
+                            {% else %}
+                                {{ caja.cerrada_por.username }}
+                            {% endif %}
+
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if caja.efectivo_esperado is not None %}
+                            $ {{ caja.efectivo_esperado|floatformat:2 }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if caja.efectivo_contado is not None %}
+                            $ {{ caja.efectivo_contado|floatformat:2 }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if caja.diferencia is not None %}
+                            $ {{ caja.diferencia|floatformat:2 }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="10">
+                        No existen cajas registradas.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
